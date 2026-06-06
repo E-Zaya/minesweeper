@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from 'react';
 import type { Difficulty, Language, Theme } from '@/lib/minesweeper/types';
+import { t } from '@/lib/minesweeper/i18n';
 import { useMinesweeper } from '@/hooks/useMinesweeper';
 import { useLeaderboard } from '@/hooks/useLeaderboard';
 import { useSound } from '@/hooks/useSound';
@@ -23,6 +24,7 @@ export default function MinesweeperPage() {
   const [difficulty, setDifficulty] = useState<Difficulty>('beginner');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [showGameOverlay, setShowGameOverlay] = useState(false);
   const [savedForRound, setSavedForRound] = useState(false);
   const [flagMode, setFlagMode] = useState(false);
 
@@ -46,6 +48,7 @@ export default function MinesweeperPage() {
   const handleDifficulty = useCallback((diff: Difficulty) => {
     setDifficulty(diff);
     reset(diff);
+    setShowGameOverlay(false);
     setSavedForRound(false);
     setFlagMode(false);
     setScreen('game');
@@ -70,12 +73,14 @@ export default function MinesweeperPage() {
 
   const handleReset = useCallback(() => {
     reset(difficulty);
+    setShowGameOverlay(false);
     setSavedForRound(false);
     setFlagMode(false);
   }, [reset, difficulty]);
 
   const handleRetry = useCallback(() => {
     reset(difficulty);
+    setShowGameOverlay(false);
     setSavedForRound(false);
     setFlagMode(false);
   }, [reset, difficulty]);
@@ -90,6 +95,7 @@ export default function MinesweeperPage() {
   const handleBackToDifficulty = useCallback(() => {
     setScreen('difficulty');
     reset(difficulty);
+    setShowGameOverlay(false);
     setSavedForRound(false);
     setFlagMode(false);
   }, [reset, difficulty]);
@@ -99,8 +105,14 @@ export default function MinesweeperPage() {
   }, []);
 
   useEffect(() => {
-    if (state.status === 'won') play('win');
-    if (state.status === 'lost') play('lose');
+    if (state.status === 'won') {
+      play('win');
+      setShowGameOverlay(true);
+    }
+    if (state.status === 'lost') {
+      play('lose');
+      setShowGameOverlay(true);
+    }
   }, [state.status, play]);
 
   if (screen === 'name') return <NameEntry onStart={handleStart} />;
@@ -136,6 +148,7 @@ export default function MinesweeperPage() {
             difficulty={difficulty}
             playerName={playerName}
             flagMode={flagMode}
+            gameOver={state.status === 'won' || state.status === 'lost'}
             onReset={handleReset}
             onLeaderboard={() => setShowLeaderboard(true)}
             onHowToPlay={() => setShowHowToPlay(true)}
@@ -154,7 +167,7 @@ export default function MinesweeperPage() {
         </div>
       </div>
 
-      {(state.status === 'won' || state.status === 'lost') && (
+      {(state.status === 'won' || state.status === 'lost') && showGameOverlay && (
         <GameOverlay
           status={state.status}
           time={state.elapsedTime}
@@ -163,8 +176,19 @@ export default function MinesweeperPage() {
           difficulty={difficulty}
           onRetry={handleRetry}
           onSave={handleSaveScore}
+          onReviewBoard={() => setShowGameOverlay(false)}
           onBackToDifficulty={handleBackToDifficulty}
         />
+      )}
+
+      {(state.status === 'won' || state.status === 'lost') && !showGameOverlay && (
+        <button
+          onClick={() => setShowGameOverlay(true)}
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 neu-btn-primary px-5 py-3 rounded-2xl
+                     font-serif text-sm tracking-wider transition-all duration-200 active:scale-95"
+        >
+          ↑ {t(language, 'showResult')}
+        </button>
       )}
 
       {showLeaderboard && (

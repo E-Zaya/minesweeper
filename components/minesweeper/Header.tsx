@@ -10,6 +10,7 @@ interface Props {
   difficulty: Difficulty;
   playerName: string;
   flagMode: boolean;
+  gameOver: boolean;
   onReset: () => void;
   onLeaderboard: () => void;
   onHowToPlay: () => void;
@@ -34,6 +35,7 @@ export default function Header({
   difficulty,
   playerName,
   flagMode,
+  gameOver,
   onReset,
   onLeaderboard,
   onHowToPlay,
@@ -171,29 +173,30 @@ export default function Header({
       </aside>
 
       {/* ── MOBILE flag-mode sticky bottom bar ── */}
-      <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30 neu-card px-2 py-2 rounded-2xl flex gap-1 items-center">
-        <span className="px-2 font-serif text-[10px] text-muted tracking-widest uppercase">
-          {language === 'jp' ? 'モード' : 'Mode'}
-        </span>
-        <button
-          onClick={() => flagMode && onFlagModeToggle()}
-          className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${
-            !flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
-          }`}
-        >
-          <span>👆</span>
-          <span>{language === 'jp' ? '開く' : 'Reveal'}</span>
-        </button>
-        <button
-          onClick={() => !flagMode && onFlagModeToggle()}
-          className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${
-            flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
-          }`}
-        >
-          <span>🚩</span>
-          <span>{language === 'jp' ? '旗' : 'Flag'}</span>
-        </button>
-      </div>
+      {!gameOver && (
+        <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30 neu-card px-2 py-2 rounded-2xl flex gap-1 items-center">
+          <span className="px-2 font-serif text-[10px] text-muted tracking-widest uppercase">
+            {language === 'jp' ? 'モード' : 'Mode'}
+          </span>
+          <button
+            onClick={() => flagMode && onFlagModeToggle()}
+            className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center ${
+              !flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
+            }`}
+          >
+            <span>{language === 'jp' ? '開く' : 'Reveal'}</span>
+          </button>
+          <button
+            onClick={() => !flagMode && onFlagModeToggle()}
+            className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${
+              flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
+            }`}
+          >
+            <span>🚩</span>
+            <span>{language === 'jp' ? '旗' : 'Flag'}</span>
+          </button>
+        </div>
+      )}
     </>
   );
 }

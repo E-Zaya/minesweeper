@@ -13,6 +13,7 @@ interface Props {
   difficulty: Difficulty;
   onRetry: () => void;
   onSave: (name: string) => void;
+  onReviewBoard: () => void;
   onBackToDifficulty: () => void;
 }
 
@@ -29,6 +30,7 @@ export default function GameOverlay({
   difficulty,
   onRetry,
   onSave,
+  onReviewBoard,
   onBackToDifficulty,
 }: Props) {
   const [name, setName] = useState(playerName);
@@ -195,6 +197,14 @@ export default function GameOverlay({
           )}
 
           {/* Bottom actions */}
+          <button
+            onClick={onReviewBoard}
+            className="neu-btn-raised w-full py-2.5 px-3 rounded-xl font-serif text-sm text-app
+                       transition-all duration-200 active:scale-95"
+          >
+            ↓ {t(language, 'viewBoard')}
+          </button>
+
           <div className="flex gap-2 pt-1">
             <button
               onClick={onBackToDifficulty}

@@ -1,0 +1,8 @@
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3030
+- PID:          17096
+- Dir:          D:\Zaya\Portfolio\Portfolio projects\ｍinesweeper
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 17096 /F to stop it.

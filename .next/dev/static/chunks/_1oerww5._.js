@@ -8,19 +8,19 @@ __turbopack_context__.s([
 ]);
 const DIFFICULTY_CONFIG = {
     beginner: {
-        rows: 8,
-        cols: 8,
-        mines: 8
+        rows: 5,
+        cols: 5,
+        mines: 4
     },
     intermediate: {
-        rows: 16,
-        cols: 16,
-        mines: 40
+        rows: 6,
+        cols: 6,
+        mines: 7
     },
     expert: {
-        rows: 16,
-        cols: 30,
-        mines: 99
+        rows: 8,
+        cols: 8,
+        mines: 13
     }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -692,6 +692,8 @@ const translations = {
         share: 'Share',
         copyLink: 'Copy result',
         copied: 'Copied!',
+        viewBoard: 'View board',
+        showResult: 'Show result',
         backToDifficulty: 'Change difficulty',
         newBest: 'New Best!',
         yourRank: 'Your rank',
@@ -746,6 +748,8 @@ const translations = {
         share: 'シェア',
         copyLink: '結果をコピー',
         copied: 'コピーしました！',
+        viewBoard: '盤面を見る',
+        showResult: '結果を見る',
         backToDifficulty: '難易度を変更',
         newBest: '自己ベスト！',
         yourRank: 'あなたの順位',
@@ -1563,7 +1567,7 @@ const DIFF_KANJI = {
     intermediate: '中',
     expert: '上'
 };
-function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flagMode, onReset, onLeaderboard, onHowToPlay, onBack, onFlagModeToggle }) {
+function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flagMode, gameOver, onReset, onLeaderboard, onHowToPlay, onBack, onFlagModeToggle }) {
     const diffLabel = language === 'jp' ? ({
         beginner: '初級',
         intermediate: '中級',
@@ -1581,7 +1585,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                         children: "←"
                     }, void 0, false, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 52,
+                        lineNumber: 54,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1595,7 +1599,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                         children: "💣"
                                     }, void 0, false, {
                                         fileName: "[project]/components/minesweeper/Header.tsx",
-                                        lineNumber: 62,
+                                        lineNumber: 64,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1603,13 +1607,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                         children: pad(minesLeft)
                                     }, void 0, false, {
                                         fileName: "[project]/components/minesweeper/Header.tsx",
-                                        lineNumber: 63,
+                                        lineNumber: 65,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 61,
+                                lineNumber: 63,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1619,7 +1623,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                 children: "😊"
                             }, void 0, false, {
                                 fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 67,
+                                lineNumber: 69,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1627,13 +1631,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                 children: pad(elapsedTime)
                             }, void 0, false, {
                                 fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 74,
+                                lineNumber: 76,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 60,
+                        lineNumber: 62,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1643,13 +1647,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                         children: "?"
                     }, void 0, false, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 77,
+                        lineNumber: 79,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 51,
+                lineNumber: 53,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -1661,14 +1665,14 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                             className: "screw-tl"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 89,
+                            lineNumber: 91,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "screw-br"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 90,
+                            lineNumber: 92,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1676,7 +1680,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                             children: "PLAYER · STATS"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 91,
+                            lineNumber: 93,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1690,7 +1694,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: "PLAYER"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 95,
+                                            lineNumber: 97,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1698,7 +1702,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: playerName
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 98,
+                                            lineNumber: 100,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1709,7 +1713,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: DIFF_KANJI[difficulty]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 100,
+                                                    lineNumber: 102,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1717,26 +1721,26 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: diffLabel
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 103,
+                                                    lineNumber: 105,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 99,
+                                            lineNumber: 101,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 94,
+                                    lineNumber: 96,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "h-px bg-current opacity-10"
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 107,
+                                    lineNumber: 109,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1750,7 +1754,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: "💣"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 112,
+                                                    lineNumber: 114,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1758,13 +1762,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'mines')
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 113,
+                                                    lineNumber: 115,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 111,
+                                            lineNumber: 113,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1772,13 +1776,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: pad(minesLeft)
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 117,
+                                            lineNumber: 119,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 110,
+                                    lineNumber: 112,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1792,7 +1796,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: "⏱"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 125,
+                                                    lineNumber: 127,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1800,13 +1804,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'time')
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 126,
+                                                    lineNumber: 128,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 124,
+                                            lineNumber: 126,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1814,20 +1818,20 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: pad(elapsedTime)
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 130,
+                                            lineNumber: 132,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 125,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "h-px bg-current opacity-10"
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 133,
+                                    lineNumber: 135,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1839,7 +1843,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: "😊"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 140,
+                                            lineNumber: 142,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1847,13 +1851,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'retry')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 141,
+                                            lineNumber: 143,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 138,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1864,7 +1868,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: "🏆"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 149,
+                                            lineNumber: 151,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1872,13 +1876,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'leaderboard')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 152,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 147,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1889,7 +1893,7 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: "📖"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 158,
+                                            lineNumber: 160,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1897,13 +1901,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'howToPlay')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 161,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 156,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1915,27 +1919,27 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 163,
+                                    lineNumber: 165,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 92,
+                            lineNumber: 94,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/minesweeper/Header.tsx",
-                    lineNumber: 88,
+                    lineNumber: 90,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 87,
+                lineNumber: 89,
                 columnNumber: 7
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            !gameOver && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30 neu-card px-2 py-2 rounded-2xl flex gap-1 items-center",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1943,32 +1947,23 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                         children: language === 'jp' ? 'モード' : 'Mode'
                     }, void 0, false, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 175,
-                        columnNumber: 9
+                        lineNumber: 178,
+                        columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: ()=>flagMode && onFlagModeToggle(),
-                        className: `px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${!flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: "👆"
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 184,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: language === 'jp' ? '開く' : 'Reveal'
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 185,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
+                        className: `px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center ${!flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            children: language === 'jp' ? '開く' : 'Reveal'
+                        }, void 0, false, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 187,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 178,
-                        columnNumber: 9
+                        lineNumber: 181,
+                        columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         onClick: ()=>!flagMode && onFlagModeToggle(),
@@ -1978,27 +1973,27 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                 children: "🚩"
                             }, void 0, false, {
                                 fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 193,
-                                columnNumber: 11
+                                lineNumber: 195,
+                                columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: language === 'jp' ? '旗' : 'Flag'
                             }, void 0, false, {
                                 fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 194,
-                                columnNumber: 11
+                                lineNumber: 196,
+                                columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 187,
-                        columnNumber: 9
+                        lineNumber: 189,
+                        columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 174,
-                columnNumber: 7
+                lineNumber: 177,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true);
@@ -2113,7 +2108,7 @@ function diffLabel(diff, lang) {
         expert: 'Expert'
     })[diff];
 }
-function GameOverlay({ status, time, playerName, language, difficulty, onRetry, onSave, onBackToDifficulty }) {
+function GameOverlay({ status, time, playerName, language, difficulty, onRetry, onSave, onReviewBoard, onBackToDifficulty }) {
     _s();
     const [name, setName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(playerName);
     const [saved, setSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -2175,7 +2170,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                 count: 90
             }, void 0, false, {
                 fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                lineNumber: 88,
+                lineNumber: 90,
                 columnNumber: 28
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2195,7 +2190,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     children: isWin ? '🎉' : '💥'
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 101,
+                                    lineNumber: 103,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2203,7 +2198,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     children: isWin ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'youWin') : (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'gameOver')
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 102,
+                                    lineNumber: 104,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2215,13 +2210,13 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 111,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 100,
+                            lineNumber: 102,
                             columnNumber: 11
                         }, this),
                         isWin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2232,7 +2227,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'yourTime')
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 117,
+                                    lineNumber: 119,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2240,7 +2235,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     children: time
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 120,
+                                    lineNumber: 122,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2248,13 +2243,13 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'seconds')
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 125,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 116,
+                            lineNumber: 118,
                             columnNumber: 13
                         }, this),
                         !isWin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2264,12 +2259,12 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                 children: language === 'jp' ? `タイム ${time}秒` : `Time: ${time}s`
                             }, void 0, false, {
                                 fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                lineNumber: 131,
+                                lineNumber: 133,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 130,
+                            lineNumber: 132,
                             columnNumber: 13
                         }, this),
                         isWin && !saved && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2283,7 +2278,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     className: "neu-input px-4 py-2.5 rounded-xl font-serif text-sm outline-none w-full text-app placeholder:text-muted"
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 140,
+                                    lineNumber: 142,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2295,13 +2290,13 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 150,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 139,
+                            lineNumber: 141,
                             columnNumber: 13
                         }, this),
                         isWin && saved && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2314,12 +2309,12 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                lineNumber: 160,
+                                lineNumber: 162,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 159,
+                            lineNumber: 161,
                             columnNumber: 13
                         }, this),
                         isWin && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2332,7 +2327,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                             className: "flex-1 h-px bg-current opacity-10"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                            lineNumber: 170,
+                                            lineNumber: 172,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2340,20 +2335,20 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'share')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 173,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex-1 h-px bg-current opacity-10"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                            lineNumber: 174,
+                                            lineNumber: 176,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 171,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2368,20 +2363,20 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                                     children: "𝕏"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                                    lineNumber: 182,
+                                                    lineNumber: 184,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: "Twitter"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                                    lineNumber: 183,
+                                                    lineNumber: 185,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                            lineNumber: 177,
+                                            lineNumber: 179,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2392,33 +2387,45 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                                     children: copied ? '✓' : '📋'
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                                    lineNumber: 190,
+                                                    lineNumber: 192,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                     children: copied ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'copied') : (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'copyLink')
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                                    lineNumber: 191,
+                                                    lineNumber: 193,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                            lineNumber: 185,
+                                            lineNumber: 187,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 176,
+                                    lineNumber: 178,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 168,
+                            lineNumber: 170,
                             columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onReviewBoard,
+                            className: "neu-btn-raised w-full py-2.5 px-3 rounded-xl font-serif text-sm text-app transition-all duration-200 active:scale-95",
+                            children: [
+                                "↓ ",
+                                (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'viewBoard')
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/minesweeper/GameOverlay.tsx",
+                            lineNumber: 200,
+                            columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "flex gap-2 pt-1",
@@ -2432,7 +2439,7 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 199,
+                                    lineNumber: 209,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2446,24 +2453,24 @@ function GameOverlay({ status, time, playerName, language, difficulty, onRetry, 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                                    lineNumber: 206,
+                                    lineNumber: 216,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                            lineNumber: 198,
+                            lineNumber: 208,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                    lineNumber: 94,
+                    lineNumber: 96,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/minesweeper/GameOverlay.tsx",
-                lineNumber: 90,
+                lineNumber: 92,
                 columnNumber: 7
             }, this)
         ]

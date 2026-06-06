@@ -284,6 +284,10 @@ img, video {
   left: 50%;
 }
 
+.bottom-4 {
+  bottom: 1rem;
+}
+
 .z-30 {
   z-index: 30;
 }
@@ -294,6 +298,10 @@ img, video {
 
 .z-\[60\] {
   z-index: 60;
+}
+
+.z-40 {
+  z-index: 40;
 }
 
 .mb-1 {

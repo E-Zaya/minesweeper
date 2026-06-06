@@ -17,9 +17,9 @@ export interface DifficultyConfig {
 }
 
 export const DIFFICULTY_CONFIG: Record<Difficulty, DifficultyConfig> = {
-  beginner: { rows: 8, cols: 8, mines: 8 },
-  intermediate: { rows: 16, cols: 16, mines: 40 },
-  expert: { rows: 16, cols: 30, mines: 99 },
+  beginner: { rows: 5, cols: 5, mines: 4 },
+  intermediate: { rows: 6, cols: 6, mines: 7 },
+  expert: { rows: 8, cols: 8, mines: 13 },
 };
 
 export type GameStatus = 'idle' | 'playing' | 'won' | 'lost';
