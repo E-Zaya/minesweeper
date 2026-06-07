@@ -100,23 +100,19 @@ export default function MinesweeperPage() {
     setFlagMode(false);
   }, [reset, difficulty]);
 
-  const handleBackToName = useCallback(() => {
-    setScreen('name');
-  }, []);
+  const handleBackToName = useCallback(() => setScreen('name'), []);
 
   useEffect(() => {
-    if (state.status === 'won') {
-      play('win');
-      setShowGameOverlay(true);
-    }
-    if (state.status === 'lost') {
-      play('lose');
-      setShowGameOverlay(true);
-    }
+    if (state.status === 'won')  { play('win');  setShowGameOverlay(true); }
+    if (state.status === 'lost') { play('lose'); setShowGameOverlay(true); }
   }, [state.status, play]);
 
+  const gameOver = state.status === 'won' || state.status === 'lost';
+
+  /* ── Name entry ── */
   if (screen === 'name') return <NameEntry onStart={handleStart} />;
 
+  /* ── Difficulty select ── */
   if (screen === 'difficulty') {
     return (
       <>
@@ -127,47 +123,50 @@ export default function MinesweeperPage() {
           onBack={handleBackToName}
         />
         {showLeaderboard && (
-          <Leaderboard
-            language={language}
-            getByDifficulty={getByDifficulty}
-            onClose={() => setShowLeaderboard(false)}
-          />
+          <Leaderboard language={language} getByDifficulty={getByDifficulty}
+            onClose={() => setShowLeaderboard(false)} />
         )}
       </>
     );
   }
 
+  /* ── Game screen ── */
   return (
-    <div className="min-h-screen md:pl-72">
-      <div className="flex flex-col items-center px-3 py-4 md:py-10 pb-24 md:pb-10">
-        <div className="w-full md:max-w-4xl">
-          <Header
-            minesLeft={state.minesLeft}
-            elapsedTime={state.elapsedTime}
-            language={language}
-            difficulty={difficulty}
-            playerName={playerName}
-            flagMode={flagMode}
-            gameOver={state.status === 'won' || state.status === 'lost'}
-            onReset={handleReset}
-            onLeaderboard={() => setShowLeaderboard(true)}
-            onHowToPlay={() => setShowHowToPlay(true)}
-            onBack={handleBackToDifficulty}
-            onFlagModeToggle={() => setFlagMode((f) => !f)}
-          />
-          <Board
-            board={state.board}
-            difficulty={difficulty}
-            gameOver={state.status === 'won' || state.status === 'lost'}
-            flagMode={flagMode}
-            onReveal={handleReveal}
-            onFlag={handleFlag}
-            onChord={handleChord}
-          />
-        </div>
-      </div>
+    // h-screen + overflow-hidden = hard viewport ceiling so board can size itself to fit
+    <div className="h-screen overflow-hidden flex flex-col md:flex-row">
 
-      {(state.status === 'won' || state.status === 'lost') && showGameOverlay && (
+      {/* Header renders mobile <header> (top bar) + desktop <aside> (sidebar) */}
+      <Header
+        minesLeft={state.minesLeft}
+        elapsedTime={state.elapsedTime}
+        language={language}
+        difficulty={difficulty}
+        playerName={playerName}
+        flagMode={flagMode}
+        gameOver={gameOver}
+        onReset={handleReset}
+        onLeaderboard={() => setShowLeaderboard(true)}
+        onHowToPlay={() => setShowHowToPlay(true)}
+        onBack={handleBackToDifficulty}
+        onFlagModeToggle={() => setFlagMode(f => !f)}
+      />
+
+      {/* Main area — flex-1 means it fills all space the sidebar doesn't take */}
+      <main className="flex-1 flex items-center justify-center min-w-0 overflow-hidden
+                       p-2 pb-20 md:p-4 md:pb-4">
+        <Board
+          board={state.board}
+          difficulty={difficulty}
+          gameOver={gameOver}
+          flagMode={flagMode}
+          onReveal={handleReveal}
+          onFlag={handleFlag}
+          onChord={handleChord}
+        />
+      </main>
+
+      {/* Game over overlay */}
+      {gameOver && showGameOverlay && (state.status === 'won' || state.status === 'lost') && (
         <GameOverlay
           status={state.status}
           time={state.elapsedTime}
@@ -181,22 +180,21 @@ export default function MinesweeperPage() {
         />
       )}
 
-      {(state.status === 'won' || state.status === 'lost') && !showGameOverlay && (
+      {/* "Show result" pill when overlay is dismissed */}
+      {gameOver && !showGameOverlay && (
         <button
           onClick={() => setShowGameOverlay(true)}
-          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 neu-btn-primary px-5 py-3 rounded-2xl
-                     font-serif text-sm tracking-wider transition-all duration-200 active:scale-95"
+          className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 neu-btn-primary
+                     px-5 py-2.5 rounded-2xl font-serif text-sm tracking-wider
+                     transition-all duration-200 active:scale-95 animate-bounce-subtle"
         >
           ↑ {t(language, 'showResult')}
         </button>
       )}
 
       {showLeaderboard && (
-        <Leaderboard
-          language={language}
-          getByDifficulty={getByDifficulty}
-          onClose={() => setShowLeaderboard(false)}
-        />
+        <Leaderboard language={language} getByDifficulty={getByDifficulty}
+          onClose={() => setShowLeaderboard(false)} />
       )}
 
       {showHowToPlay && (

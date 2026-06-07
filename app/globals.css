@@ -85,30 +85,53 @@ body {
   box-shadow:
     3px 3px 7px var(--cell-raised-dark),
    -2px -2px 5px var(--cell-raised-light);
-  transition: box-shadow 0.1s ease, transform 0.1s ease;
+  transition: box-shadow 0.12s ease, transform 0.12s ease, filter 0.12s ease;
+}
+/* hover: subtle lift + glow */
+@media (hover: hover) {
+  .neu-cell-raised:hover {
+    transform: translateY(-1.5px) scale(1.04);
+    box-shadow:
+      4px 5px 10px var(--cell-raised-dark),
+     -3px -3px 7px var(--cell-raised-light),
+      0 0 0 1.5px rgba(123,161,123,0.35);
+  }
 }
 .neu-cell-raised:active {
+  transform: scale(0.93);
   box-shadow:
-    1px 1px 3px var(--cell-raised-dark),
-   -1px -1px 2px var(--cell-raised-light),
-    inset 1px 1px 3px var(--cell-raised-dark),
+    1px 1px 2px var(--cell-raised-dark),
+   -1px -1px 1px var(--cell-raised-light),
+    inset 2px 2px 4px var(--cell-raised-dark),
     inset -1px -1px 2px var(--cell-raised-light);
 }
 
-/* Revealed cell (pressed/inset) */
+/* Revealed cell — animate in with a quick pop */
 .neu-cell-revealed {
   background: var(--bg-alt);
   box-shadow:
     inset 2px 2px 5px var(--cell-raised-dark),
     inset -1px -1px 3px var(--cell-raised-light);
+  animation: cell-reveal 0.15s ease-out both;
+}
+@keyframes cell-reveal {
+  from { opacity: 0.4; transform: scale(0.88); }
+  to   { opacity: 1;   transform: scale(1); }
 }
 
 /* Mine exploded cell */
 .neu-cell-mine {
-  background: #C86460;
+  background: var(--danger);
   box-shadow:
     inset 2px 2px 5px rgba(0,0,0,0.35),
-    inset -1px -1px 3px rgba(255,150,150,0.2);
+    inset -1px -1px 3px rgba(255,150,150,0.2),
+    0 0 12px rgba(200, 100, 96, 0.6);
+  animation: mine-burst 0.4s ease-out both;
+}
+@keyframes mine-burst {
+  0%   { transform: scale(1);    opacity: 0.2; box-shadow: 0 0 0 0 rgba(200,100,96,0.8); }
+  40%  { transform: scale(1.18); opacity: 1;   box-shadow: 0 0 16px 4px rgba(200,100,96,0.5); }
+  100% { transform: scale(1);    opacity: 1;   box-shadow: 0 0 8px 1px rgba(200,100,96,0.25); }
 }
 
 /* ─────────────────────────────────────────────
@@ -117,67 +140,83 @@ body {
 
 .retro-frame {
   background: var(--bg-alt);
-  border-radius: 28px;
-  padding: 18px;
+  border-radius: 24px;
+  padding: 12px;            /* reduced: was 18px — must match FRAME_PAD_H/V in Board.tsx */
   box-shadow:
-    /* outer drop */
-    10px 12px 26px var(--shadow-dark),
-   -8px -8px 20px var(--shadow-light),
-    /* outer chiseled rim */
+    8px 10px 22px var(--shadow-dark),
+   -6px -6px 16px var(--shadow-light),
     inset 1.5px 1.5px 0 var(--shadow-light),
     inset -1.5px -1.5px 0 var(--shadow-dark);
   position: relative;
   transition: box-shadow 0.3s ease, background 0.3s ease;
 }
 
-/* "screws" — small dots in each corner */
+/* "screws" — four corner dots */
 .retro-frame::before,
 .retro-frame::after,
 .retro-frame > .screw-tl,
 .retro-frame > .screw-br {
   content: '';
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--bg);
   box-shadow:
     inset 1px 1px 2px var(--shadow-dark),
     inset -0.5px -0.5px 1px var(--shadow-light);
 }
-.retro-frame::before { top: 9px; left: 9px; }
-.retro-frame::after  { top: 9px; right: 9px; }
-.retro-frame > .screw-tl { bottom: 9px; left: 9px; }
-.retro-frame > .screw-br { bottom: 9px; right: 9px; }
+.retro-frame::before { top: 7px; left: 7px; }
+.retro-frame::after  { top: 7px; right: 7px; }
+.retro-frame > .screw-tl { bottom: 7px; left: 7px; }
+.retro-frame > .screw-br { bottom: 7px; right: 7px; }
 
-/* Inner screen — the actual playable surface */
+/* Inner screen */
 .retro-screen {
   background: var(--bg);
-  border-radius: 18px;
-  padding: 14px;
+  border-radius: 16px;
+  padding: 10px;            /* reduced: was 14px — must match FRAME_PAD_H/V in Board.tsx */
   box-shadow:
-    inset 5px 5px 12px var(--shadow-dark),
-    inset -4px -4px 10px var(--shadow-light);
+    inset 4px 4px 10px var(--shadow-dark),
+    inset -3px -3px 8px var(--shadow-light);
   position: relative;
+  overflow: hidden;
 }
 
-/* Tiny brand label at top of frame */
+/* Subtle scan-line effect (pure CSS, pointer-events off) */
+.retro-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0,0,0,0.025) 3px,
+    rgba(0,0,0,0.025) 4px
+  );
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Brand label */
 .retro-label {
   position: absolute;
-  top: -10px;
+  top: -9px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-alt);
-  padding: 2px 14px;
-  border-radius: 8px;
+  padding: 2px 12px;
+  border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  font-size: 8px;
+  letter-spacing: 0.25em;
   color: var(--text-muted);
   text-transform: uppercase;
   box-shadow:
-    2px 2px 5px var(--shadow-dark),
-   -1px -1px 3px var(--shadow-light);
+    1px 2px 4px var(--shadow-dark),
+   -1px -1px 2px var(--shadow-light);
   white-space: nowrap;
   z-index: 2;
 }
@@ -319,6 +358,19 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.22s ease-out both;
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-5px); }
+}
+.animate-bounce-subtle {
+  animation: bounce-subtle 1.4s ease-in-out infinite;
+}
+
+/* Safe-area padding for bottom bar on notched phones */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
 }
 
 @keyframes pop-in {

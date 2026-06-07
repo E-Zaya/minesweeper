@@ -28,19 +28,15 @@ const DIFF_KANJI: Record<Difficulty, string> = {
   expert: '上',
 };
 
+function timerColor(s: number) {
+  if (s < 60)  return 'text-emerald-600 dark:text-emerald-400';
+  if (s < 180) return 'text-amber-600 dark:text-amber-400';
+  return 'text-red-600 dark:text-red-400';
+}
+
 export default function Header({
-  minesLeft,
-  elapsedTime,
-  language,
-  difficulty,
-  playerName,
-  flagMode,
-  gameOver,
-  onReset,
-  onLeaderboard,
-  onHowToPlay,
-  onBack,
-  onFlagModeToggle,
+  minesLeft, elapsedTime, language, difficulty, playerName,
+  flagMode, gameOver, onReset, onLeaderboard, onHowToPlay, onBack, onFlagModeToggle,
 }: Props) {
   const diffLabel =
     language === 'jp'
@@ -49,57 +45,62 @@ export default function Header({
 
   return (
     <>
-      {/* ── MOBILE — top bar ── */}
-      <header className="neu-header md:hidden w-full px-3 py-2.5 rounded-xl mb-3 flex items-center justify-between gap-2">
-        <button
-          onClick={onBack}
-          className="neu-btn-icon w-9 h-9 rounded-lg text-soft text-sm transition-all duration-150 active:scale-90"
-          aria-label={t(language, 'back')}
-        >
-          ←
-        </button>
+      {/* ── MOBILE top bar ── */}
+      <header className="md:hidden shrink-0 w-full px-3 pt-3 pb-2 flex items-center gap-2">
+        <div className="neu-header flex-1 px-3 py-2 rounded-xl flex items-center justify-between gap-2">
+          <button
+            onClick={onBack}
+            className="neu-btn-icon w-8 h-8 rounded-lg text-soft text-sm active:scale-90 transition-all"
+            aria-label={t(language, 'back')}
+          >
+            ←
+          </button>
 
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <span className="text-base">💣</span>
-            <span className="font-mono text-base text-red-600 dark:text-red-400 tabular-nums">
-              {pad(minesLeft)}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1">
+              <span className="text-sm">💣</span>
+              <span className={`font-mono text-sm tabular-nums ${minesLeft <= 0 ? 'animate-pulse text-red-600 dark:text-red-400' : 'text-red-600 dark:text-red-400'}`}>
+                {pad(minesLeft)}
+              </span>
+            </div>
+
+            <button
+              onClick={onReset}
+              className="neu-btn-icon w-10 h-10 rounded-xl text-xl active:scale-90 transition-all"
+              aria-label="Reset"
+            >
+              {gameOver ? '😵' : '😊'}
+            </button>
+
+            <span className={`font-mono text-sm tabular-nums ${timerColor(elapsedTime)}`}>
+              {pad(elapsedTime)}
             </span>
           </div>
-          <button
-            onClick={onReset}
-            className="neu-btn-icon w-11 h-11 rounded-xl text-2xl transition-all duration-150 active:scale-90"
-            aria-label="Reset"
-          >
-            😊
-          </button>
-          <span className="font-mono text-base text-app tabular-nums">{pad(elapsedTime)}</span>
-        </div>
 
-        <button
-          onClick={onHowToPlay}
-          className="neu-btn-icon w-9 h-9 rounded-lg text-sm text-soft active:scale-90 transition-all"
-          aria-label={language === 'jp' ? '遊び方' : 'How to play'}
-        >
-          ?
-        </button>
+          <button
+            onClick={onHowToPlay}
+            className="neu-btn-icon w-8 h-8 rounded-lg text-soft text-sm active:scale-90 transition-all font-mono"
+            aria-label={language === 'jp' ? '遊び方' : 'How to play'}
+          >
+            ?
+          </button>
+        </div>
       </header>
 
-      {/* ── DESKTOP — vertical sidebar inside retro frame ── */}
-      <aside className="hidden md:flex md:flex-col md:fixed md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-60 md:z-30">
-        <div className="retro-frame">
+      {/* ── DESKTOP sidebar — static flex item (not fixed!) ── */}
+      <aside className="hidden md:flex flex-col shrink-0 w-52 h-screen overflow-y-auto p-3 gap-3">
+        <div className="retro-frame flex-1 flex flex-col">
           <span className="screw-tl" />
           <span className="screw-br" />
           <span className="retro-label">PLAYER · STATS</span>
           <div className="retro-screen flex flex-col gap-3">
-            {/* Player info */}
-            <div className="flex flex-col gap-0.5">
-              <span className="font-mono text-[9px] tracking-[0.25em] text-muted uppercase">
-                PLAYER
-              </span>
-              <span className="font-serif text-lg text-app-strong truncate">{playerName}</span>
-              <div className="flex items-center gap-2 mt-0.5">
-                <span className="neu-inset w-7 h-7 rounded-md flex items-center justify-center font-serif text-sm text-matcha shrink-0">
+
+            {/* Player */}
+            <div className="flex flex-col gap-1">
+              <span className="font-mono text-[9px] tracking-[0.2em] text-muted uppercase">PLAYER</span>
+              <span className="font-serif text-base text-app-strong truncate leading-tight">{playerName}</span>
+              <div className="flex items-center gap-1.5">
+                <span className="neu-inset w-6 h-6 rounded flex items-center justify-center font-serif text-xs text-matcha shrink-0">
                   {DIFF_KANJI[difficulty]}
                 </span>
                 <span className="font-serif text-xs text-soft">{diffLabel}</span>
@@ -108,28 +109,26 @@ export default function Header({
 
             <div className="h-px bg-current opacity-10" />
 
-            {/* Mine counter */}
-            <div className="neu-inset px-3 py-2.5 rounded-lg flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <span className="text-base">💣</span>
-                <span className="font-serif text-[10px] text-muted tracking-wider uppercase">
-                  {t(language, 'mines')}
-                </span>
+            {/* Mines */}
+            <div className="neu-inset px-3 py-2 rounded-lg flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <span className="text-sm">💣</span>
+                <span className="font-serif text-[9px] text-muted tracking-wider uppercase">{t(language, 'mines')}</span>
               </span>
-              <span className="font-mono text-xl text-red-600 dark:text-red-400 tabular-nums">
+              <span className={`font-mono text-lg tabular-nums ${minesLeft <= 0 ? 'animate-pulse text-red-600 dark:text-red-400' : 'text-red-600 dark:text-red-400'}`}>
                 {pad(minesLeft)}
               </span>
             </div>
 
             {/* Timer */}
-            <div className="neu-inset px-3 py-2.5 rounded-lg flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <span className="text-base">⏱</span>
-                <span className="font-serif text-[10px] text-muted tracking-wider uppercase">
-                  {t(language, 'time')}
-                </span>
+            <div className="neu-inset px-3 py-2 rounded-lg flex items-center justify-between">
+              <span className="flex items-center gap-1">
+                <span className="text-sm">⏱</span>
+                <span className="font-serif text-[9px] text-muted tracking-wider uppercase">{t(language, 'time')}</span>
               </span>
-              <span className="font-mono text-xl text-app tabular-nums">{pad(elapsedTime)}</span>
+              <span className={`font-mono text-lg tabular-nums ${timerColor(elapsedTime)}`}>
+                {pad(elapsedTime)}
+              </span>
             </div>
 
             <div className="h-px bg-current opacity-10" />
@@ -137,18 +136,18 @@ export default function Header({
             {/* Reset */}
             <button
               onClick={onReset}
-              className="neu-btn-raised py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
+              className="neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
             >
-              <span className="text-lg">😊</span>
+              <span className="text-base">{gameOver ? '😵' : '😊'}</span>
               <span className="font-serif text-sm text-app">{t(language, 'retry')}</span>
             </button>
 
             {/* Leaderboard */}
             <button
               onClick={onLeaderboard}
-              className="neu-btn-raised py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
+              className="neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
             >
-              <span>🏆</span>
+              <span className="text-sm">🏆</span>
               <span className="font-serif text-sm text-soft">{t(language, 'leaderboard')}</span>
             </button>
 
@@ -157,14 +156,14 @@ export default function Header({
               onClick={onHowToPlay}
               className="neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all"
             >
-              <span>📖</span>
+              <span className="text-sm">📖</span>
               <span className="font-serif text-sm text-soft">{t(language, 'howToPlay')}</span>
             </button>
 
             {/* Back */}
             <button
               onClick={onBack}
-              className="neu-btn-subtle py-1.5 rounded-lg font-serif text-xs text-muted hover:text-app transition-colors"
+              className="py-1 rounded font-serif text-xs text-muted hover:text-soft transition-colors text-center"
             >
               ← {t(language, 'difficultyLabel')}
             </button>
@@ -172,29 +171,32 @@ export default function Header({
         </div>
       </aside>
 
-      {/* ── MOBILE flag-mode sticky bottom bar ── */}
+      {/* ── MOBILE flag-mode bar (fixed, out of flow) ── */}
       {!gameOver && (
-        <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30 neu-card px-2 py-2 rounded-2xl flex gap-1 items-center">
-          <span className="px-2 font-serif text-[10px] text-muted tracking-widest uppercase">
-            {language === 'jp' ? 'モード' : 'Mode'}
-          </span>
-          <button
-            onClick={() => flagMode && onFlagModeToggle()}
-            className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center ${
-              !flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
-            }`}
-          >
-            <span>{language === 'jp' ? '開く' : 'Reveal'}</span>
-          </button>
-          <button
-            onClick={() => !flagMode && onFlagModeToggle()}
-            className={`px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${
-              flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
-            }`}
-          >
-            <span>🚩</span>
-            <span>{language === 'jp' ? '旗' : 'Flag'}</span>
-          </button>
+        <div className="md:hidden fixed bottom-0 inset-x-0 z-30 flex justify-center pb-safe">
+          <div className="neu-card mx-3 mb-3 px-2 py-2 rounded-2xl flex gap-1 items-center shadow-lg">
+            <span className="px-2 font-mono text-[9px] text-muted tracking-widest uppercase shrink-0">
+              {language === 'jp' ? 'モード' : 'Mode'}
+            </span>
+            <button
+              onClick={() => flagMode && onFlagModeToggle()}
+              className={`flex-1 px-4 py-2.5 rounded-xl font-serif text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
+                !flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
+              }`}
+            >
+              <span className="text-base">👆</span>
+              <span>{language === 'jp' ? '開く' : 'Reveal'}</span>
+            </button>
+            <button
+              onClick={() => !flagMode && onFlagModeToggle()}
+              className={`flex-1 px-4 py-2.5 rounded-xl font-serif text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${
+                flagMode ? 'neu-mode-active' : 'neu-mode-inactive'
+              }`}
+            >
+              <span className="text-base">🚩</span>
+              <span>{language === 'jp' ? '旗' : 'Flag'}</span>
+            </button>
+          </div>
         </div>
       )}
     </>

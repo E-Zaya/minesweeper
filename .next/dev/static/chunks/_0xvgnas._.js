@@ -1437,109 +1437,136 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-const MIN_CELL = 36;
+// Total pixel overhead consumed by retro-frame (12px) + retro-screen (10px) padding on each side
+const FRAME_PAD_H = (12 + 10) * 2; // 44px horizontal
+const FRAME_PAD_V = (12 + 10) * 2 + 18; // 62px vertical (+ retro-label)
+const GAP = 3;
+const MIN_CELL = 28;
+const MAX_CELL = 52;
 function Board({ board, difficulty, gameOver, flagMode, onReveal, onFlag, onChord }) {
     _s();
-    const containerRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
-    const [cellSize, setCellSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(MIN_CELL);
-    const { cols } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DIFFICULTY_CONFIG"][difficulty];
+    const wrapperRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const [cellSize, setCellSize] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(36);
+    const { cols, rows } = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$types$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DIFFICULTY_CONFIG"][difficulty];
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Board.useEffect": ()=>{
-            const update = {
-                "Board.useEffect.update": ()=>{
-                    if (!containerRef.current) return;
-                    const w = containerRef.current.clientWidth;
-                    const gap = 3;
-                    const computed = Math.floor((w - gap * (cols - 1)) / cols);
-                    setCellSize(Math.max(MIN_CELL, computed));
+            if (!wrapperRef.current) return;
+            const compute = {
+                "Board.useEffect.compute": (w, h)=>{
+                    const gridW = w - FRAME_PAD_H;
+                    const gridH = h - FRAME_PAD_V;
+                    const fromW = Math.floor((gridW - GAP * (cols - 1)) / cols);
+                    const fromH = Math.floor((gridH - GAP * (rows - 1)) / rows);
+                    // Fit both axes; clamp to reasonable range
+                    return Math.min(MAX_CELL, Math.max(MIN_CELL, Math.min(fromW, fromH)));
                 }
-            }["Board.useEffect.update"];
-            update();
-            const ro = new ResizeObserver(update);
-            if (containerRef.current) ro.observe(containerRef.current);
+            }["Board.useEffect.compute"];
+            const ro = new ResizeObserver({
+                "Board.useEffect": (entries)=>{
+                    for (const e of entries){
+                        // contentRect = content box, excludes padding of the wrapper itself
+                        setCellSize(compute(e.contentRect.width, e.contentRect.height));
+                    }
+                }
+            }["Board.useEffect"]);
+            ro.observe(wrapperRef.current);
+            // Initial calculation
+            const { width, height } = wrapperRef.current.getBoundingClientRect();
+            setCellSize(compute(width, height));
             return ({
                 "Board.useEffect": ()=>ro.disconnect()
             })["Board.useEffect"];
         }
     }["Board.useEffect"], [
-        cols
+        cols,
+        rows
     ]);
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "retro-frame w-full",
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                className: "screw-tl"
-            }, void 0, false, {
-                fileName: "[project]/components/minesweeper/Board.tsx",
-                lineNumber: 41,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                className: "screw-br"
-            }, void 0, false, {
-                fileName: "[project]/components/minesweeper/Board.tsx",
-                lineNumber: 42,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                className: "retro-label",
-                children: "BOARD"
-            }, void 0, false, {
-                fileName: "[project]/components/minesweeper/Board.tsx",
-                lineNumber: 43,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                ref: containerRef,
-                className: "retro-screen w-full overflow-x-auto",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex flex-col",
-                    style: {
-                        gap: '3px',
-                        width: 'fit-content',
-                        margin: '0 auto'
-                    },
-                    children: board.map((row)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex",
-                            style: {
-                                gap: '3px'
-                            },
-                            children: row.map((cell)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Cell$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                    cell: cell,
-                                    cellSize: cellSize,
-                                    flagMode: flagMode,
-                                    onReveal: onReveal,
-                                    onFlag: onFlag,
-                                    onChord: onChord,
-                                    gameOver: gameOver
-                                }, `${cell.row}-${cell.col}`, false, {
-                                    fileName: "[project]/components/minesweeper/Board.tsx",
-                                    lineNumber: 52,
-                                    columnNumber: 17
-                                }, this))
-                        }, row[0].row, false, {
-                            fileName: "[project]/components/minesweeper/Board.tsx",
-                            lineNumber: 50,
-                            columnNumber: 13
-                        }, this))
+    return(// wrapperRef fills the entire space the parent gives — this is what we measure
+    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        ref: wrapperRef,
+        className: "w-full h-full flex items-center justify-center",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "retro-frame",
+            style: {
+                display: 'inline-flex',
+                flexDirection: 'column'
+            },
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "screw-tl"
                 }, void 0, false, {
                     fileName: "[project]/components/minesweeper/Board.tsx",
-                    lineNumber: 45,
+                    lineNumber: 61,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "screw-br"
+                }, void 0, false, {
+                    fileName: "[project]/components/minesweeper/Board.tsx",
+                    lineNumber: 62,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "retro-label",
+                    children: "BOARD"
+                }, void 0, false, {
+                    fileName: "[project]/components/minesweeper/Board.tsx",
+                    lineNumber: 63,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "retro-screen",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex flex-col",
+                        style: {
+                            gap: `${GAP}px`
+                        },
+                        children: board.map((row)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex",
+                                style: {
+                                    gap: `${GAP}px`
+                                },
+                                children: row.map((cell)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Cell$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        cell: cell,
+                                        cellSize: cellSize,
+                                        flagMode: flagMode,
+                                        onReveal: onReveal,
+                                        onFlag: onFlag,
+                                        onChord: onChord,
+                                        gameOver: gameOver
+                                    }, `${cell.row}-${cell.col}`, false, {
+                                        fileName: "[project]/components/minesweeper/Board.tsx",
+                                        lineNumber: 69,
+                                        columnNumber: 19
+                                    }, this))
+                            }, row[0].row, false, {
+                                fileName: "[project]/components/minesweeper/Board.tsx",
+                                lineNumber: 67,
+                                columnNumber: 15
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/components/minesweeper/Board.tsx",
+                        lineNumber: 65,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/minesweeper/Board.tsx",
+                    lineNumber: 64,
                     columnNumber: 9
                 }, this)
-            }, void 0, false, {
-                fileName: "[project]/components/minesweeper/Board.tsx",
-                lineNumber: 44,
-                columnNumber: 7
-            }, this)
-        ]
-    }, void 0, true, {
+            ]
+        }, void 0, true, {
+            fileName: "[project]/components/minesweeper/Board.tsx",
+            lineNumber: 60,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
         fileName: "[project]/components/minesweeper/Board.tsx",
-        lineNumber: 40,
+        lineNumber: 59,
         columnNumber: 5
-    }, this);
+    }, this));
 }
-_s(Board, "yWLeCICCbq5O+jF9ftIMS2d/HvI=");
+_s(Board, "eMSVCmaB6/BHqDYzjiQwjz/TEcs=");
 _c = Board;
 var _c;
 __turbopack_context__.k.register(_c, "Board");
@@ -1567,6 +1594,11 @@ const DIFF_KANJI = {
     intermediate: '中',
     expert: '上'
 };
+function timerColor(s) {
+    if (s < 60) return 'text-emerald-600 dark:text-emerald-400';
+    if (s < 180) return 'text-amber-600 dark:text-amber-400';
+    return 'text-red-600 dark:text-red-400';
+}
 function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flagMode, gameOver, onReset, onLeaderboard, onHowToPlay, onBack, onFlagModeToggle }) {
     const diffLabel = language === 'jp' ? ({
         beginner: '初級',
@@ -1576,103 +1608,110 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
-                className: "neu-header md:hidden w-full px-3 py-2.5 rounded-xl mb-3 flex items-center justify-between gap-2",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: onBack,
-                        className: "neu-btn-icon w-9 h-9 rounded-lg text-soft text-sm transition-all duration-150 active:scale-90",
-                        "aria-label": (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'back'),
-                        children: "←"
-                    }, void 0, false, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 54,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center gap-3",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "flex items-center gap-1",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-base",
-                                        children: "💣"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/minesweeper/Header.tsx",
-                                        lineNumber: 64,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "font-mono text-base text-red-600 dark:text-red-400 tabular-nums",
-                                        children: pad(minesLeft)
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/minesweeper/Header.tsx",
-                                        lineNumber: 65,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 63,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: onReset,
-                                className: "neu-btn-icon w-11 h-11 rounded-xl text-2xl transition-all duration-150 active:scale-90",
-                                "aria-label": "Reset",
-                                children: "😊"
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 69,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "font-mono text-base text-app tabular-nums",
-                                children: pad(elapsedTime)
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 76,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 62,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: onHowToPlay,
-                        className: "neu-btn-icon w-9 h-9 rounded-lg text-sm text-soft active:scale-90 transition-all",
-                        "aria-label": language === 'jp' ? '遊び方' : 'How to play',
-                        children: "?"
-                    }, void 0, false, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 79,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
+                className: "md:hidden shrink-0 w-full px-3 pt-3 pb-2 flex items-center gap-2",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "neu-header flex-1 px-3 py-2 rounded-xl flex items-center justify-between gap-2",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onBack,
+                            className: "neu-btn-icon w-8 h-8 rounded-lg text-soft text-sm active:scale-90 transition-all",
+                            "aria-label": (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'back'),
+                            children: "←"
+                        }, void 0, false, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 51,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center gap-3",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-1",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-sm",
+                                            children: "💣"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/minesweeper/Header.tsx",
+                                            lineNumber: 61,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: `font-mono text-sm tabular-nums ${minesLeft <= 0 ? 'animate-pulse text-red-600 dark:text-red-400' : 'text-red-600 dark:text-red-400'}`,
+                                            children: pad(minesLeft)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/minesweeper/Header.tsx",
+                                            lineNumber: 62,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 60,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: onReset,
+                                    className: "neu-btn-icon w-10 h-10 rounded-xl text-xl active:scale-90 transition-all",
+                                    "aria-label": "Reset",
+                                    children: gameOver ? '😵' : '😊'
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 67,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: `font-mono text-sm tabular-nums ${timerColor(elapsedTime)}`,
+                                    children: pad(elapsedTime)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 75,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 59,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onHowToPlay,
+                            className: "neu-btn-icon w-8 h-8 rounded-lg text-soft text-sm active:scale-90 transition-all font-mono",
+                            "aria-label": language === 'jp' ? '遊び方' : 'How to play',
+                            children: "?"
+                        }, void 0, false, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 80,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/minesweeper/Header.tsx",
+                    lineNumber: 50,
+                    columnNumber: 9
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 53,
+                lineNumber: 49,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                className: "hidden md:flex md:flex-col md:fixed md:left-6 md:top-1/2 md:-translate-y-1/2 md:w-60 md:z-30",
+                className: "hidden md:flex flex-col shrink-0 w-52 h-screen overflow-y-auto p-3 gap-3",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "retro-frame",
+                    className: "retro-frame flex-1 flex flex-col",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "screw-tl"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 91,
+                            lineNumber: 93,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "screw-br"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 92,
+                            lineNumber: 94,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1680,40 +1719,40 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                             children: "PLAYER · STATS"
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 93,
+                            lineNumber: 95,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "retro-screen flex flex-col gap-3",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex flex-col gap-0.5",
+                                    className: "flex flex-col gap-1",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "font-mono text-[9px] tracking-[0.25em] text-muted uppercase",
+                                            className: "font-mono text-[9px] tracking-[0.2em] text-muted uppercase",
                                             children: "PLAYER"
-                                        }, void 0, false, {
-                                            fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 97,
-                                            columnNumber: 15
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "font-serif text-lg text-app-strong truncate",
-                                            children: playerName
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
                                             lineNumber: 100,
                                             columnNumber: 15
                                         }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "font-serif text-base text-app-strong truncate leading-tight",
+                                            children: playerName
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/minesweeper/Header.tsx",
+                                            lineNumber: 101,
+                                            columnNumber: 15
+                                        }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "flex items-center gap-2 mt-0.5",
+                                            className: "flex items-center gap-1.5",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "neu-inset w-7 h-7 rounded-md flex items-center justify-center font-serif text-sm text-matcha shrink-0",
+                                                    className: "neu-inset w-6 h-6 rounded flex items-center justify-center font-serif text-xs text-matcha shrink-0",
                                                     children: DIFF_KANJI[difficulty]
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 102,
+                                                    lineNumber: 103,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1721,129 +1760,129 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                                     children: diffLabel
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 105,
+                                                    lineNumber: 106,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 102,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 96,
+                                    lineNumber: 99,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "h-px bg-current opacity-10"
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 110,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "neu-inset px-3 py-2.5 rounded-lg flex items-center justify-between",
+                                    className: "neu-inset px-3 py-2 rounded-lg flex items-center justify-between",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "flex items-center gap-1.5",
+                                            className: "flex items-center gap-1",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-base",
+                                                    className: "text-sm",
                                                     children: "💣"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 114,
-                                                    columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-serif text-[10px] text-muted tracking-wider uppercase",
-                                                    children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'mines')
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
                                                     lineNumber: 115,
                                                     columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "font-serif text-[9px] text-muted tracking-wider uppercase",
+                                                    children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'mines')
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                                    lineNumber: 116,
+                                                    columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 113,
+                                            lineNumber: 114,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "font-mono text-xl text-red-600 dark:text-red-400 tabular-nums",
+                                            className: `font-mono text-lg tabular-nums ${minesLeft <= 0 ? 'animate-pulse text-red-600 dark:text-red-400' : 'text-red-600 dark:text-red-400'}`,
                                             children: pad(minesLeft)
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 119,
+                                            lineNumber: 118,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 113,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "neu-inset px-3 py-2.5 rounded-lg flex items-center justify-between",
+                                    className: "neu-inset px-3 py-2 rounded-lg flex items-center justify-between",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "flex items-center gap-1.5",
+                                            className: "flex items-center gap-1",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "text-base",
+                                                    className: "text-sm",
                                                     children: "⏱"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                                    lineNumber: 126,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "font-serif text-[9px] text-muted tracking-wider uppercase",
+                                                    children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'time')
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/minesweeper/Header.tsx",
                                                     lineNumber: 127,
                                                     columnNumber: 17
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                    className: "font-serif text-[10px] text-muted tracking-wider uppercase",
-                                                    children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'time')
-                                                }, void 0, false, {
-                                                    fileName: "[project]/components/minesweeper/Header.tsx",
-                                                    lineNumber: 128,
-                                                    columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 126,
+                                            lineNumber: 125,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "font-mono text-xl text-app tabular-nums",
+                                            className: `font-mono text-lg tabular-nums ${timerColor(elapsedTime)}`,
                                             children: pad(elapsedTime)
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 132,
+                                            lineNumber: 129,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 125,
+                                    lineNumber: 124,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "h-px bg-current opacity-10"
                                 }, void 0, false, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 134,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: onReset,
-                                    className: "neu-btn-raised py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all",
+                                    className: "neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: "text-lg",
-                                            children: "😊"
+                                            className: "text-base",
+                                            children: gameOver ? '😵' : '😊'
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 142,
+                                            lineNumber: 141,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1851,24 +1890,25 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'retry')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 143,
+                                            lineNumber: 142,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 138,
+                                    lineNumber: 137,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: onLeaderboard,
-                                    className: "neu-btn-raised py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all",
+                                    className: "neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-sm",
                                             children: "🏆"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 151,
+                                            lineNumber: 150,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1876,13 +1916,13 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'leaderboard')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 152,
+                                            lineNumber: 151,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 147,
+                                    lineNumber: 146,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1890,10 +1930,11 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                     className: "neu-btn-raised py-2 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-sm",
                                             children: "📖"
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 160,
+                                            lineNumber: 159,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1901,98 +1942,116 @@ function Header({ minesLeft, elapsedTime, language, difficulty, playerName, flag
                                             children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'howToPlay')
                                         }, void 0, false, {
                                             fileName: "[project]/components/minesweeper/Header.tsx",
-                                            lineNumber: 161,
+                                            lineNumber: 160,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 156,
+                                    lineNumber: 155,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: onBack,
-                                    className: "neu-btn-subtle py-1.5 rounded-lg font-serif text-xs text-muted hover:text-app transition-colors",
+                                    className: "py-1 rounded font-serif text-xs text-muted hover:text-soft transition-colors text-center",
                                     children: [
                                         "← ",
                                         (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'difficultyLabel')
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/minesweeper/Header.tsx",
-                                    lineNumber: 165,
+                                    lineNumber: 164,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 94,
+                            lineNumber: 96,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/minesweeper/Header.tsx",
-                    lineNumber: 90,
+                    lineNumber: 92,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 89,
+                lineNumber: 91,
                 columnNumber: 7
             }, this),
             !gameOver && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-30 neu-card px-2 py-2 rounded-2xl flex gap-1 items-center",
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: "px-2 font-serif text-[10px] text-muted tracking-widest uppercase",
-                        children: language === 'jp' ? 'モード' : 'Mode'
-                    }, void 0, false, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 178,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>flagMode && onFlagModeToggle(),
-                        className: `px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center ${!flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                            children: language === 'jp' ? '開く' : 'Reveal'
+                className: "md:hidden fixed bottom-0 inset-x-0 z-30 flex justify-center pb-safe",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "neu-card mx-3 mb-3 px-2 py-2 rounded-2xl flex gap-1 items-center shadow-lg",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "px-2 font-mono text-[9px] text-muted tracking-widest uppercase shrink-0",
+                            children: language === 'jp' ? 'モード' : 'Mode'
                         }, void 0, false, {
                             fileName: "[project]/components/minesweeper/Header.tsx",
-                            lineNumber: 187,
+                            lineNumber: 178,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>flagMode && onFlagModeToggle(),
+                            className: `flex-1 px-4 py-2.5 rounded-xl font-serif text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${!flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-base",
+                                    children: "👆"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 187,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: language === 'jp' ? '開く' : 'Reveal'
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 188,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 181,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>!flagMode && onFlagModeToggle(),
+                            className: `flex-1 px-4 py-2.5 rounded-xl font-serif text-sm transition-all duration-200 flex items-center justify-center gap-1.5 ${flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-base",
+                                    children: "🚩"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 196,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: language === 'jp' ? '旗' : 'Flag'
+                                }, void 0, false, {
+                                    fileName: "[project]/components/minesweeper/Header.tsx",
+                                    lineNumber: 197,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/minesweeper/Header.tsx",
+                            lineNumber: 190,
                             columnNumber: 13
                         }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 181,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>!flagMode && onFlagModeToggle(),
-                        className: `px-4 py-2 rounded-xl font-serif text-sm transition-all duration-200 flex items-center gap-1.5 ${flagMode ? 'neu-mode-active' : 'neu-mode-inactive'}`,
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: "🚩"
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 195,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                children: language === 'jp' ? '旗' : 'Flag'
-                            }, void 0, false, {
-                                fileName: "[project]/components/minesweeper/Header.tsx",
-                                lineNumber: 196,
-                                columnNumber: 13
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/components/minesweeper/Header.tsx",
-                        lineNumber: 189,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/minesweeper/Header.tsx",
+                    lineNumber: 177,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
                 fileName: "[project]/components/minesweeper/Header.tsx",
-                lineNumber: 177,
+                lineNumber: 176,
                 columnNumber: 9
             }, this)
         ]
@@ -3083,9 +3142,7 @@ function MinesweeperPage() {
         difficulty
     ]);
     const handleBackToName = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "MinesweeperPage.useCallback[handleBackToName]": ()=>{
-            setScreen('name');
-        }
+        "MinesweeperPage.useCallback[handleBackToName]": ()=>setScreen('name')
     }["MinesweeperPage.useCallback[handleBackToName]"], []);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MinesweeperPage.useEffect": ()=>{
@@ -3102,14 +3159,15 @@ function MinesweeperPage() {
         state.status,
         play
     ]);
-    if (screen === 'name') return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$NameEntry$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+    const gameOver = state.status === 'won' || state.status === 'lost';
+    /* ── Name entry ── */ if (screen === 'name') return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$NameEntry$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
         onStart: handleStart
     }, void 0, false, {
         fileName: "[project]/app/minesweeper/page.tsx",
-        lineNumber: 118,
+        lineNumber: 113,
         columnNumber: 33
     }, this);
-    if (screen === 'difficulty') {
+    /* ── Difficulty select ── */ if (screen === 'difficulty') {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$DifficultySelect$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3119,7 +3177,7 @@ function MinesweeperPage() {
                     onBack: handleBackToName
                 }, void 0, false, {
                     fileName: "[project]/app/minesweeper/page.tsx",
-                    lineNumber: 123,
+                    lineNumber: 119,
                     columnNumber: 9
                 }, this),
                 showLeaderboard && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Leaderboard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3128,63 +3186,55 @@ function MinesweeperPage() {
                     onClose: ()=>setShowLeaderboard(false)
                 }, void 0, false, {
                     fileName: "[project]/app/minesweeper/page.tsx",
-                    lineNumber: 130,
+                    lineNumber: 126,
                     columnNumber: 11
                 }, this)
             ]
         }, void 0, true);
     }
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "min-h-screen md:pl-72",
+    /* ── Game screen ── */ return(// h-screen + overflow-hidden = hard viewport ceiling so board can size itself to fit
+    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "h-screen overflow-hidden flex flex-col md:flex-row",
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex flex-col items-center px-3 py-4 md:py-10 pb-24 md:pb-10",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "w-full md:max-w-4xl",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Header$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            minesLeft: state.minesLeft,
-                            elapsedTime: state.elapsedTime,
-                            language: language,
-                            difficulty: difficulty,
-                            playerName: playerName,
-                            flagMode: flagMode,
-                            gameOver: state.status === 'won' || state.status === 'lost',
-                            onReset: handleReset,
-                            onLeaderboard: ()=>setShowLeaderboard(true),
-                            onHowToPlay: ()=>setShowHowToPlay(true),
-                            onBack: handleBackToDifficulty,
-                            onFlagModeToggle: ()=>setFlagMode((f)=>!f)
-                        }, void 0, false, {
-                            fileName: "[project]/app/minesweeper/page.tsx",
-                            lineNumber: 144,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Board$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            board: state.board,
-                            difficulty: difficulty,
-                            gameOver: state.status === 'won' || state.status === 'lost',
-                            flagMode: flagMode,
-                            onReveal: handleReveal,
-                            onFlag: handleFlag,
-                            onChord: handleChord
-                        }, void 0, false, {
-                            fileName: "[project]/app/minesweeper/page.tsx",
-                            lineNumber: 158,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Header$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                minesLeft: state.minesLeft,
+                elapsedTime: state.elapsedTime,
+                language: language,
+                difficulty: difficulty,
+                playerName: playerName,
+                flagMode: flagMode,
+                gameOver: gameOver,
+                onReset: handleReset,
+                onLeaderboard: ()=>setShowLeaderboard(true),
+                onHowToPlay: ()=>setShowHowToPlay(true),
+                onBack: handleBackToDifficulty,
+                onFlagModeToggle: ()=>setFlagMode((f)=>!f)
+            }, void 0, false, {
+                fileName: "[project]/app/minesweeper/page.tsx",
+                lineNumber: 139,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+                className: "flex-1 flex items-center justify-center min-w-0 overflow-hidden p-2 pb-20 md:p-4 md:pb-4",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$Board$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                    board: state.board,
+                    difficulty: difficulty,
+                    gameOver: gameOver,
+                    flagMode: flagMode,
+                    onReveal: handleReveal,
+                    onFlag: handleFlag,
+                    onChord: handleChord
+                }, void 0, false, {
                     fileName: "[project]/app/minesweeper/page.tsx",
-                    lineNumber: 143,
+                    lineNumber: 157,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/minesweeper/page.tsx",
-                lineNumber: 142,
+                lineNumber: 155,
                 columnNumber: 7
             }, this),
-            (state.status === 'won' || state.status === 'lost') && showGameOverlay && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$GameOverlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+            gameOver && showGameOverlay && (state.status === 'won' || state.status === 'lost') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$GameOverlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                 status: state.status,
                 time: state.elapsedTime,
                 playerName: playerName,
@@ -3196,12 +3246,12 @@ function MinesweeperPage() {
                 onBackToDifficulty: handleBackToDifficulty
             }, void 0, false, {
                 fileName: "[project]/app/minesweeper/page.tsx",
-                lineNumber: 171,
+                lineNumber: 170,
                 columnNumber: 9
             }, this),
-            (state.status === 'won' || state.status === 'lost') && !showGameOverlay && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+            gameOver && !showGameOverlay && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: ()=>setShowGameOverlay(true),
-                className: "fixed bottom-4 left-1/2 -translate-x-1/2 z-40 neu-btn-primary px-5 py-3 rounded-2xl font-serif text-sm tracking-wider transition-all duration-200 active:scale-95",
+                className: "fixed bottom-4 left-1/2 -translate-x-1/2 z-40 neu-btn-primary px-5 py-2.5 rounded-2xl font-serif text-sm tracking-wider transition-all duration-200 active:scale-95 animate-bounce-subtle",
                 children: [
                     "↑ ",
                     (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$minesweeper$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])(language, 'showResult')
@@ -3217,7 +3267,7 @@ function MinesweeperPage() {
                 onClose: ()=>setShowLeaderboard(false)
             }, void 0, false, {
                 fileName: "[project]/app/minesweeper/page.tsx",
-                lineNumber: 195,
+                lineNumber: 196,
                 columnNumber: 9
             }, this),
             showHowToPlay && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$minesweeper$2f$HowToPlay$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -3225,15 +3275,15 @@ function MinesweeperPage() {
                 onClose: ()=>setShowHowToPlay(false)
             }, void 0, false, {
                 fileName: "[project]/app/minesweeper/page.tsx",
-                lineNumber: 203,
+                lineNumber: 201,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/minesweeper/page.tsx",
-        lineNumber: 141,
+        lineNumber: 136,
         columnNumber: 5
-    }, this);
+    }, this));
 }
 _s(MinesweeperPage, "mGt8QWvLS+HTPhOHzrReh9/FYCQ=", false, function() {
     return [
